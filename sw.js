@@ -1,11 +1,9 @@
-// Définit un nom pour notre cache.
-// Change ce nom (ex: 'v2') quand tu voudras forcer une mise à jour.
-const CACHE_NAME = 'emploi-du-temps-v1';
+// **MODIFIÉ** : Change le nom du cache pour forcer la mise à jour
+const CACHE_NAME = 'emploi-du-temps-v2';
 
-// La liste des fichiers que ton application doit sauvegarder.
-// C'est "l'application shell".
+// **MODIFIÉ** : Corrige les chemins pour qu'ils soient relatifs au dossier
 const urlsToCache = [
-  '/',
+  './', // './' fait référence au dossier courant (/MON-EMPLOI-DU-TEMPS/)
   'index.html',
   'style.css',
   'app.js',
@@ -14,25 +12,20 @@ const urlsToCache = [
 ];
 
 // --- 1. L'ÉVÉNEMENT D'INSTALLATION ---
-// S'exécute quand le Service Worker est installé pour la première fois.
 self.addEventListener('install', (event) => {
-  // On attend que l'installation soit finie
   event.waitUntil(
-    // Ouvre le cache avec le nom que nous avons défini
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('Cache ouvert');
-        // Ajoute tous les fichiers de notre liste au cache
+        console.log('Cache v2 ouvert');
+        // Ajoute les fichiers corrigés au cache
         return cache.addAll(urlsToCache);
       })
   );
 });
 
 // --- 2. L'ÉVÉNEMENT D'ACTIVATION (Mise à jour) ---
-// S'exécute quand un nouveau Service Worker remplace l'ancien.
-// C'est ici qu'on gère les mises à jour !
 self.addEventListener('activate', (event) => {
-  const cacheWhitelist = [CACHE_NAME]; // Seul notre nouveau cache est gardé
+  const cacheWhitelist = [CACHE_NAME]; // Seul notre nouveau cache v2 est gardé
 
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -40,10 +33,7 @@ self.addEventListener('activate', (event) => {
         cacheNames.map((cacheName) => {
           // Si un cache est ancien (n'est pas dans la whitelist), on le supprime !
           if (cacheWhitelist.indexOf(cacheName) === -1) {
-            
-            // ** CORRIGÉ ICI : Guillemets doubles à l'extérieur **
             console.log("Suppression de l'ancien cache :", cacheName);
-            
             return caches.delete(cacheName);
           }
         })
@@ -53,7 +43,6 @@ self.addEventListener('activate', (event) => {
 });
 
 // --- 3. L'ÉVÉNEMENT FETCH (Interception des requêtes) ---
-// S'exécute à chaque fois que la page demande un fichier (CSS, JS, image, etc.)
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     // 1. On cherche d'abord dans le cache
@@ -63,7 +52,6 @@ self.addEventListener('fetch', (event) => {
         if (response) {
           return response;
         }
-        
         // Si on ne le trouve pas, on le demande au réseau (Internet)
         return fetch(event.request);
       }
