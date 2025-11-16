@@ -32,7 +32,7 @@ function showTab(tabId) {
     document.getElementById(tabId).classList.add('active');
     document.querySelector(`.tab-button[onclick="showTab('${tabId}')"]`).classList.add('active');
     
-    // * NOUVEAU : Sauvegarde l'onglet actif dans la "mémoire" du navigateur
+    // Sauvegarde l'onglet actif dans la "mémoire" du navigateur
     localStorage.setItem('activeTabId', tabId);
     
     // Met à jour le tableau de bord pour qu'il corresponde à l'onglet
@@ -41,7 +41,7 @@ function showTab(tabId) {
 
 
 /**
- * Logique du "Tableau de Bord Intelligent" (inchangée)
+ * Logique du "Tableau de Bord Intelligent"
  * Prend en compte l'onglet actif et les heures creuses.
  */
 function updateDashboard() {
@@ -124,7 +124,7 @@ function updateDashboard() {
     messageElement.innerHTML = welcomeMessage + specificMessage;
 }
 
-/* Fonction pour surligner les 3 cellules d'un cours (inchangée) */
+/* Fonction pour surligner les 3 cellules d'un cours */
 function highlightCourse(firstCell) {
     let cell = firstCell;
     for(let i=0; i<3; i++) {
@@ -136,7 +136,7 @@ function highlightCourse(firstCell) {
 }
 
 
-/* Logique de la Modale (Pop-up) (inchangée) */
+/* Logique de la Modale (Pop-up) */
 const modalContainer = document.getElementById('modal-container');
 function openModal(cellElement) {
     const code = cellElement.dataset.matiere;
@@ -164,11 +164,10 @@ function applyFilters() {
     const teacherFilter = document.getElementById('filter-teacher').value;
     const subjectFilter = document.getElementById('filter-subject').value;
 
-    // * NOUVEAU : Sauvegarde les filtres dans la "mémoire"
+    // Sauvegarde les filtres dans la "mémoire"
     localStorage.setItem('savedTeacherFilter', teacherFilter);
     localStorage.setItem('savedSubjectFilter', subjectFilter);
 
-    // Le reste de la fonction est inchangé
     const rows = document.querySelectorAll('.schedule-table tbody tr');
 
     rows.forEach(row => {
@@ -196,11 +195,10 @@ function applyFilters() {
 
 /**
  * Initialisation de la page (quand tout est chargé)
- * C'est ici qu'on lit la "mémoire"
  */
 document.addEventListener('DOMContentLoaded', () => {
     
-    // * NOUVEAU : Charger l'onglet sauvegardé
+    // Charger l'onglet sauvegardé
     const savedTabId = localStorage.getItem('activeTabId');
     if (savedTabId) {
         showTab(savedTabId); // Affiche l'onglet sauvegardé
@@ -208,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showTab('groupe1'); // Sinon, affiche le groupe 1 par défaut
     }
     
-    // * NOUVEAU : Charger les filtres sauvegardés
+    // Charger les filtres sauvegardés
     const savedTeacher = localStorage.getItem('savedTeacherFilter');
     const savedSubject = localStorage.getItem('savedSubjectFilter');
 
@@ -224,21 +222,33 @@ document.addEventListener('DOMContentLoaded', () => {
         applyFilters();
     }
 
-    // Met à jour l'horloge et le surlignage toutes les 60 secondes (inchangé)
+    // Met à jour l'horloge et le surlignage toutes les 60 secondes
     setInterval(updateDashboard, 60000); 
 
-    // Attache les clics pour la modale (inchangé)
+    // Attache les clics pour la modale
     document.querySelectorAll('td[data-matiere]').forEach(cell => {
         cell.onclick = () => openModal(cell);
     });
 
-    // Attache les actions pour les filtres (inchangé)
+    // Attache les actions pour les filtres
     document.getElementById('filter-teacher').addEventListener('change', applyFilters);
     document.getElementById('filter-subject').addEventListener('change', applyFilters);
     
     document.getElementById('reset-filters').addEventListener('click', () => {
         document.getElementById('filter-teacher').value = 'tous';
         document.getElementById('filter-subject').value = 'tous';
-        applyFilters(); // Cela va aussi sauvegarder les filtres réinitialisés (tous/tous)
+        applyFilters();
     });
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/MON-EMPLOI-DU-TEMPS/sw.js') 
+          .then((registration) => {
+            console.log('Service Worker enregistré avec succès ! Portée :', registration.scope);
+          })
+          .catch((error) => {
+            console.log('Échec de l\'enregistrement du Service Worker :', error);
+          });
+      });
+    }
+    
 });

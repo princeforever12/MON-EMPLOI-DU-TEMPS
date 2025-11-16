@@ -1,0 +1,16 @@
+{
+  "name": "Mon Emploi du Temps (ITER)",
+  "short_name": "Edt ITER",
+  "description": "Application de l'emploi du temps L2 ITER",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3498db",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ]
+}
