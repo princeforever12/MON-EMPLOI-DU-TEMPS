@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Application L2 ITER - Semestre 3</title>
-    <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="style.css">
-    
+    <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#3498db">
 </head>
@@ -14,15 +13,17 @@
     <h1>Emploi du Temps L2 INFORMATIQUE TELECOMMUNICATION ELECTRONIQUE RESEAU</h1>
     <h2>SEMESTRE 3</h2>
 
+    <!-- Tableau de Bord -->
     <div id="dashboard-container">
         <div id="dashboard-icon">💡</div>
-        <div id="dashboard-message">Analyse de votre emploi du temps...</div>
+        <div id="dashboard-message">Chargement des données...</div>
     </div>
 
+    <!-- Barre de Filtres -->
     <div id="filter-bar">
          <div class="filter-group">
             <label for="filter-teacher">Filtrer par Enseignant :</label>
-           <select id="filter-teacher">
+            <select id="filter-teacher">
                 <option value="tous">-- Tous les enseignants --</option>
                 <option value="M.ACHY">M. ACHY</option>
                 <option value="M.NINDJIN">M. NINDJIN</option>
@@ -64,11 +65,13 @@
 
     <div class="container">
         
+        <!-- Navigation par onglets -->
         <nav class="tab-nav">
             <button class="tab-button active" onclick="showTab('groupe1')">Groupe 1</button>
             <button class="tab-button" onclick="showTab('groupe2')">Groupe 2</button>
         </nav>
 
+        <!-- Contenu Onglet 1: Groupe 1 -->
         <div id="groupe1" class="content-section active">
             <h3>TRONC COMMUN L2 SEMESTRE 3 GROUPE 1</h3>
             
@@ -78,48 +81,14 @@
                         <tr> <th></th> <th colspan="3">08H-11H</th> <th colspan="3">11H-14H</th> <th colspan="3">14H-17H</th> </tr>
                         <tr> <th>Jour</th> <th>Code</th><th>Salle</th><th>Enseignant</th> <th>Code</th><th>Salle</th><th>Enseignant</th> <th>Code</th><th>Salle</th><th>Enseignant</th> </tr>
                     </thead>
+                    <!-- Le corps du tableau est maintenant VIDE. C'est JavaScript qui va le remplir ! -->
                     <tbody>
-                        <tr>
-                            <th>Lundi</th>
-                            <td id="g1_lun_8" class="stit342" data-matiere="STIT342(I)" data-salle="B13" data-enseignant="M.NINDJIN" data-horaire="08H-11H">STIT342(I)</td><td>B13</td><td>M.NINDJIN</td>
-                            <td id="g1_lun_11" class="stit332" data-matiere="STIT332" data-salle="B13" data-enseignant="M.NINDJIN" data-horaire="11H-14H">STIT332</td><td>B13</td><td>M.NINDJIN</td>
-                            <td id="g1_lun_14" class="stla351" data-matiere="STLA351(G1)" data-salle="B14" data-enseignant="M.BALLIET" data-horaire="14H-17H">STLA351(G1)</td><td>B14</td><td>M.BALLIET</td>
-                        </tr>
-                        <tr>
-                            <th>Mardi</th>
-                            <td id="g1_mar_8" class="stit342" data-matiere="STIT342(EEA)" data-salle="B12" data-enseignant="M.ACHY" data-horaire="08H-11H">STIT342(EEA)</td><td>B12</td><td>M.ACHY</td>
-                            <td colspan="3"></td>
-                            <td id="g1_mar_14" class="stit312" data-matiere="STIT312" data-salle="B16" data-enseignant="M.ACHY" data-horaire="14H-17H">STIT312</td><td>B16</td><td>M.ACHY</td>
-                        </tr>
-                        <tr>
-                            <th>Mercredi</th>
-                            <td id="g1_mer_8" class="stit311" data-matiere="STIT311" data-salle="B7" data-enseignant="M.N'GUESSAN" data-horaire="08H-11H">STIT311</td><td>B7</td><td>M.N'GUESSAN</td>
-                            <td id="g1_mer_11" class="stit322" data-matiere="STIT322" data-salle="B13" data-enseignant="M.N'GBESSO" data-horaire="11H-14H">STIT322</td><td>B13</td><td>M.N'GBESSO</td>
-                            <td id="g1_mer_14" class="stit321" data-matiere="STIT321" data-salle="B14" data-enseignant="M.YOBOQUET" data-horaire="14H-17H">STIT321</td><td>B14</td><td>M.YOBOQUET</td>
-                        </tr>
-                        <tr>
-                            <th>Jeudi</th>
-                            <td colspan="3"></td>
-                            <td colspan="3"></td>
-                            <td id="g1_jeu_14" class="stit342" data-matiere="STIT342(IMT)" data-salle="B13" data-enseignant="M.NIAVA" data-horaire="14H-17H">STIT342(IMT)</td><td>B13</td><td>M.NIAVA</td>
-                        </tr>
-                        <tr>
-                            <th>Vendredi</th>
-                            <td id="g1_ven_8" class="stcu361" data-matiere="STCU361" data-salle="B18" data-enseignant="M.AFFI" data-horaire="08H-11H">STCU361</td><td>B18</td><td>M.AFFI</td>
-                            <td colspan="3"></td>
-                            <td id="g1_ven_14" class="stit313" data-matiere="STIT313(G1)" data-salle="B13" data-enseignant="M.AKOSSO" data-horaire="14H-17H">STIT313(G1)</td><td>B13</td><td>M.AKOSSO</td>
-                        </tr>
-                        <tr>
-                            <th>Samedi</th>
-                            <td id="g1_sam_8" class="stit331" data-matiere="STIT331(G1)" data-salle="B13" data-enseignant="M.CAMARA" data-horaire="08H-11H">STIT331(G1)</td><td>B13</td><td>M.CAMARA</td>
-                            <td id="g1_sam_11" class="stit341" data-matiere="STIT341(I)" data-salle="09" data-enseignant="M.ANGAMAN" data-horaire="11H-14H">STIT341(I)</td><td>09</td><td>M.ANGAMAN</td>
-                            <td id="g1_sam_14" class="stit341" data-matiere="STIT341(I)" data-salle="09" data-enseignant="M.ANGAMAN" data-horaire="14H-17H">STIT341(I)</td><td>09</td><td>M.ANGAMAN</td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
+        <!-- Contenu Onglet 2: Groupe 2 -->
         <div id="groupe2" class="content-section">
             <h3>TRONC COMMUN L2 SEMESTRE 3 GROUPE 2</h3>
             
@@ -129,49 +98,15 @@
                         <tr> <th></th> <th colspan="3">08H-11H</th> <th colspan="3">11H-14H</th> <th colspan="3">14H-17H</th> </tr>
                         <tr> <th>Jour</th> <th>Code</th><th>Salle</th><th>Enseignant</th> <th>Code</th><th>Salle</th><th>Enseignant</th> <th>Code</th><th>Salle</th><th>Enseignant</th> </tr>
                     </thead>
+                    <!-- Le corps du tableau est maintenant VIDE. -->
                     <tbody>
-                        <tr>
-                            <th>Lundi</th>
-                            <td id="g2_lun_8" class="stit342" data-matiere="STIT342(I)" data-salle="B13" data-enseignant="M.NINDJIN" data-horaire="08H-11H">STIT342(I)</td><td>B13</td><td>M.NINDJIN</td>
-                            <td colspan="3"></td>
-                            <td id="g2_lun_14" class="stla351" data-matiere="STLA351(G2)" data-salle="B2" data-enseignant="M.KONE AMIDOU" data-horaire="14H-17H">STLA351(G2)</td><td>B2</td><td>M.KONE AMIDOU</td>
-                        </tr>
-                        <tr>
-                            <th>Mardi</th>
-                            <td id="g2_mar_8" class="stit342" data-matiere="STIT342(EEA)" data-salle="B12" data-enseignant="M.ACHY" data-horaire="08H-11H">STIT342(EEA)</td><td>B12</td><td>M.ACHY</td>
-                            <td id="g2_mar_11" class="stit312" data-matiere="STIT312" data-salle="B10" data-enseignant="M.ACHY" data-horaire="11H-14H">STIT312</td><td>B10</td><td>M.ACHY</td>
-                            <td id="g2_mar_14" class="stit321" data-matiere="STIT321" data-salle="B10" data-enseignant="M.YOBOQUET" data-horaire="14H-17H">STIT321</td><td>B10</td><td>M.YOBOQUET</td>
-                        </tr>
-                         <tr>
-                            <th>Mercredi</th>
-                            <td id="g2_mer_8" class="stit322" data-matiere="STIT322" data-salle="B10" data-enseignant="M.N'GBESSO" data-horaire="08H-11H">STIT322</td><td>B10</td><td>M.N'GBESSO</td>
-                            <td colspan="3"></td>
-                            <td id="g2_mer_14" class="stcu361" data-matiere="STCU361" data-salle="B13" data-enseignant="M.AFFI" data-horaire="14H-17H">STCU361</td><td>B13</td><td>M.AFFI</td>
-                        </tr>
-                        <tr>
-                            <th>Jeudi</th>
-                            <td id="g2_jeu_8" class="stit311" data-matiere="STIT311" data-salle="B20" data-enseignant="M.N'GUESSAN" data-horaire="08H-11H">STIT311</td><td>B20</td><td>M.N'GUESSAN</td>
-                            <td id="g2_jeu_11" class="stit332" data-matiere="STIT332" data-salle="B13" data-enseignant="M.NINDJIN" data-horaire="11H-14H">STIT332</td><td>B13</td><td>M.NINDJIN</td>
-                            <td id="g2_jeu_14" class="stit341" data-matiere="STIT341(EEA)" data-salle="B12" data-enseignant="M.NEMLIN" data-horaire="14H-17H">STIT341(EEA)</td><td>B12</td><td>M.NEMLIN</td>
-                        </tr>
-                        <tr>
-                            <th>Vendredi</th>
-                            <td id="g2_ven_8" class="stit331" data-matiere="STIT331(G2)" data-salle="B13" data-enseignant="M.GONO" data-horaire="08H-11H">STIT331(G2)</td><td>B13</td><td>M.GONO</td>
-                            <td id="g2_ven_11" class="stit313" data-matiere="STIT313(G2)" data-salle="B13" data-enseignant="M.GONO" data-horaire="11H-14H">STIT313(G2)</td><td>B13</td><td>M.GONO</td>
-                            <td colspan="3"></td>
-                        </tr>
-                        <tr>
-                            <th>Samedi</th>
-                            <td colspan="3"></td>
-                            <td id="g2_sam_11" class="stit341" data-matiere="STIT341(IMT)" data-salle="B16" data-enseignant="M.N'GUESSAN" data-horaire="11H-14H">STIT341(IMT)</td><td>B16</td><td>M.N'GUESSAN</td>
-                            <td colspan="3"></td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
+    <!-- Structure de la Modale -->
     <div id="modal-container" onclick="closeModal()">
         <div id="modal-box" onclick="event.stopPropagation()">
             <span class="modal-close" onclick="closeModal()">&times;</span>
@@ -184,7 +119,8 @@
         </div>
     </div>
 
-    <script src="app.js" defer></script>
+    <!-- On ajoute type="module" pour pouvoir utiliser 'import' dans app.js -->
+    <script src="app.js" type="module"></script>
 
 </body>
 </html>
