@@ -7,6 +7,16 @@
     <link rel="stylesheet" href="style.css">
     <style>
         /* Styles spécifiques à la page Admin */
+        
+        /* NOUVEAU : Une barre d'entête pour le bouton déconnexion */
+        .top-bar {
+            display: flex;
+            justify-content: flex-end; /* Pousse le contenu à droite */
+            padding: 10px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
         .admin-container {
             max-width: 800px;
             margin: 0 auto;
@@ -14,7 +24,7 @@
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            display: none; /* Caché par défaut tant qu'on n'est pas connecté */
+            display: none; /* Caché par défaut */
         }
 
         .login-container {
@@ -27,18 +37,20 @@
             text-align: center;
         }
         
+        /* Style pour ton message de bienvenue */
         h1.welcome-title {
             color: #2c3e50;
             text-align: center;
             font-size: 32px;
-            margin-bottom: 20px;
-            margin-top: 20px;
+            margin-bottom: 10px;
+            margin-top: 0; /* On enlève la marge du haut pour le rapprocher */
             padding: 10px;
             background: linear-gradient(to right, #3498db, #2ecc71);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 900;
             letter-spacing: 1px;
+            line-height: 1.2;
         }
         
         form {
@@ -103,15 +115,21 @@
             margin-top: 10px;
         }
 
+        /* Bouton déconnexion restylisé */
         .btn-logout {
             background-color: #e74c3c;
             color: white;
-            padding: 8px 15px;
+            padding: 10px 20px;
             border: none;
-            border-radius: 5px;
+            border-radius: 20px; /* Plus arrondi */
             cursor: pointer;
-            float: right;
-            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            transition: background 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .btn-logout:hover {
+            background-color: #c0392b;
         }
 
         /* Style pour le bouton d'importation */
@@ -162,6 +180,19 @@
             border-radius: 3px;
             cursor: pointer;
         }
+        
+        /* Responsive pour mobile : empiler le formulaire */
+        @media (max-width: 600px) {
+            form {
+                grid-template-columns: 1fr;
+            }
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+            h1.welcome-title {
+                font-size: 24px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -172,7 +203,6 @@
         <form id="loginForm">
             <div class="form-group">
                 <label>Email</label>
-                <!-- MODIFIÉ : Champ vide -->
                 <input type="email" id="email" placeholder="votre@email.com" required>
             </div>
             <div class="form-group">
@@ -189,18 +219,20 @@
     <!-- SECTION ADMIN (Cachée par défaut) -->
     <div id="adminSection" style="display: none;">
         
-        <div style="max-width: 800px; margin: 0 auto; padding: 10px;">
+        <!-- Barre supérieure dédiée au bouton déconnexion -->
+        <div class="top-bar">
             <button id="btnLogout" class="btn-logout">Se déconnecter</button>
         </div>
 
+        <!-- Titre bien centré et dégagé -->
         <h1 class="welcome-title">Bonjour Mr.SIBY bienvenue sur votre espace administrateur ⚙</h1>
         
-        <div style="text-align: center; margin-bottom: 20px;">
-            <a href="index.html" style="font-size: 18px; text-decoration: none; color: #3498db;">← Retour à l'Emploi du Temps</a>
+        <div style="text-align: center; margin-bottom: 30px;">
+            <a href="index.html" style="font-size: 16px; text-decoration: none; color: #7f8c8d; border-bottom: 1px solid #bdc3c7;">← Retour à l'Emploi du Temps public</a>
         </div>
 
-        <div class="admin-container" style="display: block;"> <!-- Le display:block est écrasé par le JS si déconnecté -->
-            <h2>Ajouter un Cours</h2>
+        <div class="admin-container" style="display: block;">
+            <h2 style="text-align:center; margin-bottom:20px; color:#34495e;">Ajouter un Cours</h2>
             <form id="addCourseForm">
                 
                 <div class="form-group">
@@ -277,7 +309,7 @@
             <div class="course-list">
                 <h2>Liste des Cours Actuels</h2>
                 <div id="coursesContainer">
-                    <p>Connectez-vous pour voir les cours.</p>
+                    <p>Chargement...</p>
                 </div>
             </div>
         </div>
@@ -301,7 +333,6 @@
         const db = getFirestore(app);
         const auth = getAuth(app); 
 
-        // Éléments du DOM
         const loginSection = document.getElementById('loginSection');
         const adminSection = document.getElementById('adminSection');
         const loginForm = document.getElementById('loginForm');
@@ -311,110 +342,74 @@
         const coursesContainer = document.getElementById('coursesContainer');
         const btnImport = document.getElementById('btnImport');
 
-        // --- GESTION DE L'AUTHENTIFICATION ---
-
+        // --- AUTH ---
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // Utilisateur connecté : On cache le login et on montre l'admin
                 loginSection.style.display = 'none';
                 adminSection.style.display = 'block';
-                loadCourses(); // On charge les cours seulement si connecté
+                loadCourses();
             } else {
-                // Utilisateur déconnecté : On montre le login et on cache l'admin
                 loginSection.style.display = 'block';
                 adminSection.style.display = 'none';
                 coursesContainer.innerHTML = "<p>Connectez-vous pour gérer les cours.</p>";
             }
         });
 
-        // Se connecter
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-
             signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    console.log("Connecté en tant que : " + userCredential.user.email);
-                })
-                .catch((error) => {
-                    alert("Erreur de connexion : " + error.message);
-                });
+                .catch((error) => { alert("Erreur de connexion : " + error.message); });
         });
 
-        // Se déconnecter
         btnLogout.addEventListener('click', () => {
-            signOut(auth).then(() => {
-                alert("Déconnecté !");
-            }).catch((error) => {
-                console.error(error);
-            });
+            signOut(auth).then(() => { alert("Déconnecté !"); }).catch(console.error);
         });
 
-
-        // --- LOGIQUE D'IMPORTATION ET CRUD ---
-        
+        // --- COURS PAR DEFAUT ---
         const defaultCourses = [
-            // GROUPE 1
             { groupe: "Groupe 1", jour: "Lundi", heure: "08H-11H", code: "STIT342(I)", matiere: "Modélisation des systèmes (UML)", salle: "B13", enseignant: "M. NINDJIN", classeCouleur: "stit342" },
             { groupe: "Groupe 1", jour: "Lundi", heure: "11H-14H", code: "STIT332", matiere: "Intro prog web", salle: "B13", enseignant: "M. NINDJIN", classeCouleur: "stit332" },
             { groupe: "Groupe 1", jour: "Lundi", heure: "14H-17H", code: "STLA351", matiere: "Anglais sc. et tech.", salle: "B14", enseignant: "M. BALLIET", classeCouleur: "stla351" },
-            
             { groupe: "Groupe 1", jour: "Mardi", heure: "08H-11H", code: "STIT342(EEA)", matiere: "Automatisme (GRAFCET)", salle: "B12", enseignant: "M. ACHY", classeCouleur: "stit342" },
             { groupe: "Groupe 1", jour: "Mardi", heure: "14H-17H", code: "STIT312", matiere: "Initiation langage machine", salle: "B16", enseignant: "M. ACHY", classeCouleur: "stit312" },
-            
             { groupe: "Groupe 1", jour: "Mercredi", heure: "08H-11H", code: "STIT311", matiere: "Théorie des langages", salle: "B7", enseignant: "M. N'GUESSAN", classeCouleur: "stit311" },
             { groupe: "Groupe 1", jour: "Mercredi", heure: "11H-14H", code: "STIT322", matiere: "Concepts réseaux", salle: "B13", enseignant: "M. N'GBESSO", classeCouleur: "stit322" },
             { groupe: "Groupe 1", jour: "Mercredi", heure: "14H-17H", code: "STIT321", matiere: "Electronique comm.", salle: "B14", enseignant: "M. YOBOQUET", classeCouleur: "stit321" },
-            
             { groupe: "Groupe 1", jour: "Jeudi", heure: "14H-17H", code: "STIT342(IMT)", matiere: "Electronique num.", salle: "B13", enseignant: "M. NIAVA", classeCouleur: "stit342" },
-            
             { groupe: "Groupe 1", jour: "Vendredi", heure: "08H-11H", code: "STCU361", matiere: "S'exprimer pour communiquer", salle: "B18", enseignant: "M. AFFI", classeCouleur: "stcu361" },
             { groupe: "Groupe 1", jour: "Vendredi", heure: "14H-17H", code: "STIT313", matiere: "Système d'exploitation", salle: "B13", enseignant: "M. AKOSSO", classeCouleur: "stit313" },
-            
             { groupe: "Groupe 1", jour: "Samedi", heure: "08H-11H", code: "STIT331", matiere: "Prog impérative", salle: "B13", enseignant: "M. CAMARA", classeCouleur: "stit331" },
             { groupe: "Groupe 1", jour: "Samedi", heure: "11H-14H", code: "STIT341(I)", matiere: "Analyse gestion (MERISE)", salle: "09", enseignant: "M. ANGAMAN", classeCouleur: "stit341" },
             { groupe: "Groupe 1", jour: "Samedi", heure: "14H-17H", code: "STIT341(I)", matiere: "Analyse gestion (MERISE)", salle: "09", enseignant: "M. ANGAMAN", classeCouleur: "stit341" },
 
-            // GROUPE 2
             { groupe: "Groupe 2", jour: "Lundi", heure: "08H-11H", code: "STIT342(I)", matiere: "Modélisation des systèmes (UML)", salle: "B13", enseignant: "M. NINDJIN", classeCouleur: "stit342" },
             { groupe: "Groupe 2", jour: "Lundi", heure: "14H-17H", code: "STLA351", matiere: "Anglais sc. et tech.", salle: "B2", enseignant: "M. KONE AMIDOU", classeCouleur: "stla351" },
-            
             { groupe: "Groupe 2", jour: "Mardi", heure: "08H-11H", code: "STIT342(EEA)", matiere: "Automatisme (GRAFCET)", salle: "B12", enseignant: "M. ACHY", classeCouleur: "stit342" },
             { groupe: "Groupe 2", jour: "Mardi", heure: "11H-14H", code: "STIT312", matiere: "Initiation langage machine", salle: "B10", enseignant: "M. ACHY", classeCouleur: "stit312" },
             { groupe: "Groupe 2", jour: "Mardi", heure: "14H-17H", code: "STIT321", matiere: "Electronique comm.", salle: "B10", enseignant: "M. YOBOQUET", classeCouleur: "stit321" },
-            
             { groupe: "Groupe 2", jour: "Mercredi", heure: "08H-11H", code: "STIT322", matiere: "Concepts réseaux", salle: "B10", enseignant: "M. N'GBESSO", classeCouleur: "stit322" },
             { groupe: "Groupe 2", jour: "Mercredi", heure: "14H-17H", code: "STCU361", matiere: "S'exprimer pour communiquer", salle: "B13", enseignant: "M. AFFI", classeCouleur: "stcu361" },
-            
             { groupe: "Groupe 2", jour: "Jeudi", heure: "08H-11H", code: "STIT311", matiere: "Théorie des langages", salle: "B20", enseignant: "M. N'GUESSAN", classeCouleur: "stit311" },
             { groupe: "Groupe 2", jour: "Jeudi", heure: "11H-14H", code: "STIT332", matiere: "Intro prog web", salle: "B13", enseignant: "M. NINDJIN", classeCouleur: "stit332" },
             { groupe: "Groupe 2", jour: "Jeudi", heure: "14H-17H", code: "STIT341(EEA)", matiere: "Electronique puissance", salle: "B12", enseignant: "M. NEMLIN", classeCouleur: "stit341" },
-            
             { groupe: "Groupe 2", jour: "Vendredi", heure: "08H-11H", code: "STIT331", matiere: "Prog impérative", salle: "B13", enseignant: "M. GONO", classeCouleur: "stit331" },
             { groupe: "Groupe 2", jour: "Vendredi", heure: "11H-14H", code: "STIT313", matiere: "Système d'exploitation", salle: "B13", enseignant: "M. GONO", classeCouleur: "stit313" },
-            
             { groupe: "Groupe 2", jour: "Samedi", heure: "11H-14H", code: "STIT341(IMT)", matiere: "Traitement signal", salle: "B16", enseignant: "M. N'GUESSAN", classeCouleur: "stit341" }
         ];
 
+        // --- LOGIQUE ---
         btnImport.addEventListener('click', async () => {
             if(confirm(`Voulez-vous vraiment importer ${defaultCourses.length} cours ?`)) {
                 btnImport.disabled = true;
                 btnImport.innerText = "Importation en cours...";
-                
                 let count = 0;
                 for (const course of defaultCourses) {
-                    try {
-                        // On ajoute le cours sans se préoccuper de l'ID Firebase
-                        await addDoc(collection(db, "cours"), course);
-                        count++;
-                        console.log(`Cours ajouté: ${course.code}`);
-                    } catch (e) {
-                        console.error("Erreur import:", e);
-                    }
+                    try { await addDoc(collection(db, "cours"), course); count++; } 
+                    catch (e) { console.error(e); }
                 }
-                
-                alert(`${count} cours ont été importés avec succès !`);
+                alert(`${count} cours importés !`);
                 btnImport.innerText = "Importation Terminée";
                 loadCourses(); 
             }
@@ -432,38 +427,29 @@
                 enseignant: document.getElementById('enseignant').value,
                 classeCouleur: document.getElementById('classeCouleur').value
             };
-
             try {
                 await addDoc(collection(db, "cours"), newCourse);
-                alert("Cours ajouté avec succès !");
+                alert("Cours ajouté !");
                 form.reset();
                 loadCourses();
-            } catch (error) {
-                console.error("Erreur d'ajout : ", error);
-                alert("Erreur : " + error.message);
-            }
+            } catch (error) { alert("Erreur : " + error.message); }
         });
 
         async function loadCourses() {
             coursesContainer.innerHTML = "Chargement...";
             const querySnapshot = await getDocs(collection(db, "cours"));
             coursesContainer.innerHTML = "";
-            
-            if (querySnapshot.empty) {
-                coursesContainer.innerHTML = "<p>Aucun cours trouvé.</p>";
-                return;
-            }
+            if (querySnapshot.empty) { coursesContainer.innerHTML = "<p>Aucun cours trouvé.</p>"; return; }
 
             querySnapshot.forEach((docSnap) => {
                 const course = docSnap.data();
                 const id = docSnap.id;
-
                 const div = document.createElement('div');
                 div.className = 'course-item';
                 div.innerHTML = `
                     <div>
                         <strong>${course.groupe}</strong> - ${course.jour} ${course.heure}<br>
-                        ${course.code} - ${course.enseignant} (${course.salle})
+                        ${course.code} - ${course.enseignant}
                     </div>
                     <button class="btn-delete" onclick="deleteCourse('${id}')">Supprimer</button>
                 `;
@@ -472,15 +458,11 @@
         }
 
         window.deleteCourse = async (id) => {
-            if(confirm("Voulez-vous vraiment supprimer ce cours ?")) {
+            if(confirm("Supprimer ?")) {
                 await deleteDoc(doc(db, "cours", id));
                 loadCourses();
             }
         }
-
-        // On charge la liste si l'utilisateur est déjà connecté (pour ne pas attendre l'auth)
-        // Mais on sait que l'affichage est géré par onAuthStateChanged
-        // loadCourses(); 
     </script>
 
 </body>
