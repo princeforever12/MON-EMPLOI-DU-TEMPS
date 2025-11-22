@@ -6,318 +6,110 @@
     <title>Administration - Emploi du Temps</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Styles spécifiques à la page Admin */
+        .admin-container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); display: none; }
+        .login-container { max-width: 400px; margin: 50px auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); text-align: center; }
         
-        /* NOUVEAU : Une barre d'entête pour le bouton déconnexion */
-        .top-bar {
-            display: flex;
-            justify-content: flex-end; /* Pousse le contenu à droite */
-            padding: 10px 20px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .admin-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            display: none; /* Caché par défaut */
-        }
-
-        .login-container {
-            max-width: 400px;
-            margin: 50px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-        
-        /* Style pour ton message de bienvenue */
-        h1.welcome-title {
-            color: #2c3e50;
-            text-align: center;
-            font-size: 32px;
-            margin-bottom: 10px;
-            margin-top: 0; /* On enlève la marge du haut pour le rapprocher */
-            padding: 10px;
+        h1.welcome-title { text-align: center; font-size: 32px; margin-bottom: 10px; margin-top: 0; padding: 10px; font-weight: 900; letter-spacing: 1px; line-height: 1.2; }
+        .gradient-text {
             background: linear-gradient(to right, #3498db, #2ecc71);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-weight: 900;
-            letter-spacing: 1px;
-            line-height: 1.2;
         }
-        
-        form {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
+        .emoji-fix { -webkit-text-fill-color: initial; display: inline-block; }
 
-        #loginForm {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            text-align: left;
-        }
-        
-        .form-group.full-width {
-            grid-column: span 2;
-        }
-        
-        label {
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #2c3e50;
-        }
-        
-        input, select {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        
-        button.btn-submit {
-            background-color: #27ae60;
-            color: white;
-            padding: 15px;
-            border: none;
-            border-radius: 5px;
-            font-size: 18px;
-            cursor: pointer;
-            grid-column: span 2;
-            margin-top: 20px;
-        }
-        
-        button.btn-submit:hover {
-            background-color: #219150;
-        }
-
-        .btn-login {
-            background-color: #3498db;
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        /* Bouton déconnexion restylisé */
-        .btn-logout {
-            background-color: #e74c3c;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 20px; /* Plus arrondi */
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 14px;
-            transition: background 0.3s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .btn-logout:hover {
-            background-color: #c0392b;
-        }
-
-        /* Style pour le bouton d'importation */
-        .import-section {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #e8f6f3;
-            border: 2px dashed #27ae60;
-            border-radius: 8px;
-            text-align: center;
-        }
-        
-        .btn-import {
-            background-color: #3498db;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        
-        .btn-import:hover {
-            background-color: #2980b9;
-        }
-
-        .course-list {
-            margin-top: 40px;
-        }
-
-        .course-item {
-            background: #f9f9f9;
-            border: 1px solid #eee;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .btn-delete {
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-        
-        /* Responsive pour mobile : empiler le formulaire */
-        @media (max-width: 600px) {
-            form {
-                grid-template-columns: 1fr;
-            }
-            .form-group.full-width {
-                grid-column: span 1;
-            }
-            h1.welcome-title {
-                font-size: 24px;
-            }
-        }
+        form { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        #loginForm { display: flex; flex-direction: column; gap: 15px; }
+        .form-group { display: flex; flex-direction: column; text-align: left; }
+        .form-group.full-width { grid-column: span 2; }
+        label { font-weight: bold; margin-bottom: 5px; color: #2c3e50; }
+        input, select { padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; }
+        button.btn-submit { background-color: #27ae60; color: white; padding: 15px; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; grid-column: span 2; margin-top: 20px; }
+        button.btn-submit:hover { background-color: #219150; }
+        .btn-login { background-color: #3498db; color: white; padding: 12px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; margin-top: 10px; }
+        .btn-logout { background-color: #e74c3c; color: white; padding: 10px 20px; border: none; border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 14px; transition: background 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .top-bar { display: flex; justify-content: flex-end; padding: 10px 20px; max-width: 900px; margin: 0 auto; }
+        .import-section { margin-top: 30px; padding: 20px; background-color: #e8f6f3; border: 2px dashed #27ae60; border-radius: 8px; text-align: center; transition: opacity 0.5s ease; }
+        .btn-import { background-color: #3498db; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; margin-top: 10px; }
+        .course-item { background: #f9f9f9; border: 1px solid #eee; padding: 15px; margin-bottom: 10px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-delete { background-color: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; }
+        .header-list { display: flex; justify-content: space-between; align-items: center; margin-top: 40px; margin-bottom: 15px; }
+        .btn-delete-all { background-color: #c0392b; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .btn-delete-all:hover { background-color: #a93226; }
+        @media (max-width: 600px) { form { grid-template-columns: 1fr; } .form-group.full-width { grid-column: span 1; } h1.welcome-title { font-size: 24px; } }
     </style>
 </head>
 <body>
 
-    <!-- SECTION DE CONNEXION -->
     <div id="loginSection" class="login-container">
         <h2>🔒 Connexion Admin</h2>
         <form id="loginForm">
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" id="email" placeholder="votre@email.com" required>
-            </div>
-            <div class="form-group">
-                <label>Mot de passe</label>
-                <input type="password" id="password" placeholder="********" required>
-            </div>
+            <div class="form-group"><label>Email</label><input type="email" id="email" placeholder="votre@email.com" required></div>
+            <div class="form-group"><label>Mot de passe</label><input type="password" id="password" placeholder="********" required></div>
             <button type="submit" class="btn-login">Se connecter</button>
         </form>
-        <div style="margin-top: 20px;">
-            <a href="index.html">← Retour à l'accueil</a>
-        </div>
+        <div style="margin-top: 20px;"><a href="index.html">← Retour à l'accueil</a></div>
     </div>
 
-    <!-- SECTION ADMIN (Cachée par défaut) -->
     <div id="adminSection" style="display: none;">
+        <div class="top-bar"><button id="btnLogout" class="btn-logout">Se déconnecter</button></div>
         
-        <!-- Barre supérieure dédiée au bouton déconnexion -->
-        <div class="top-bar">
-            <button id="btnLogout" class="btn-logout">Se déconnecter</button>
-        </div>
-
-        <!-- Titre bien centré et dégagé -->
-        <h1 class="welcome-title">Bonjour Mr.SIBY bienvenue sur votre espace administrateur ⚙</h1>
+        <h1 class="welcome-title">
+            <span class="gradient-text">Bonjour Mr.SIBY bienvenue sur votre espace administrateur</span> 
+            <span class="emoji-fix">👋</span>
+        </h1>
         
-        <div style="text-align: center; margin-bottom: 30px;">
-            <a href="index.html" style="font-size: 16px; text-decoration: none; color: #7f8c8d; border-bottom: 1px solid #bdc3c7;">← Retour à l'Emploi du Temps public</a>
-        </div>
+        <div style="text-align: center; margin-bottom: 30px;"><a href="index.html" style="font-size: 16px; text-decoration: none; color: #7f8c8d; border-bottom: 1px solid #bdc3c7;">← Retour à l'Emploi du Temps public</a></div>
 
         <div class="admin-container" style="display: block;">
             <h2 style="text-align:center; margin-bottom:20px; color:#34495e;">Ajouter un Cours</h2>
             <form id="addCourseForm">
                 
                 <div class="form-group">
-                    <label>Groupe</label>
+                    <label>Niveau</label>
+                    <select id="niveau" required onchange="updateGroupOptions()">
+                        <option value="" disabled selected>Choisir le niveau...</option>
+                        <option value="L1">Licence 1 (L1)</option>
+                        <option value="L2">Licence 2 (L2)</option>
+                        <option value="L3">Licence 3 (L3)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Groupe / Parcours</label>
                     <select id="groupe" required>
-                        <option value="Groupe 1">Groupe 1</option>
-                        <option value="Groupe 2">Groupe 2</option>
+                        <option value="">-- Choisir d'abord un niveau --</option>
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label>Jour</label>
-                    <select id="jour" required>
-                        <option value="Lundi">Lundi</option>
-                        <option value="Mardi">Mardi</option>
-                        <option value="Mercredi">Mercredi</option>
-                        <option value="Jeudi">Jeudi</option>
-                        <option value="Vendredi">Vendredi</option>
-                        <option value="Samedi">Samedi</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Horaire</label>
-                    <select id="heure" required>
-                        <option value="08H-11H">08H-11H</option>
-                        <option value="11H-14H">11H-14H</option>
-                        <option value="14H-17H">14H-17H</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Code Matière</label>
-                    <input type="text" id="code" placeholder="Ex: STIT342(I)" required>
-                </div>
-
-                <div class="form-group full-width">
-                    <label>Nom Complet de la Matière</label>
-                    <input type="text" id="matiere" placeholder="Ex: Modélisation des systèmes..." required>
-                </div>
-
-                <div class="form-group">
-                    <label>Salle</label>
-                    <input type="text" id="salle" placeholder="Ex: B13" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Enseignant</label>
-                    <input type="text" id="enseignant" placeholder="Ex: M. NINDJIN" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Couleur (Classe CSS)</label>
-                    <select id="classeCouleur">
-                        <option value="stit341">Bleu Clair (stit341)</option>
-                        <option value="stit342">Jaune (stit342)</option>
-                        <option value="stit311">Violet (stit311)</option>
-                        <option value="stit312">Vert (stit312)</option>
-                        <option value="stcu361">Vert Lime (stcu361)</option>
-                        <option value="stla351">Indigo (stla351)</option>
-                        <option value="stpr371">Gris (stpr371)</option>
-                    </select>
-                </div>
-
+                <div class="form-group"><label>Jour</label><select id="jour" required><option value="Lundi">Lundi</option><option value="Mardi">Mardi</option><option value="Mercredi">Mercredi</option><option value="Jeudi">Jeudi</option><option value="Vendredi">Vendredi</option><option value="Samedi">Samedi</option></select></div>
+                <div class="form-group"><label>Horaire</label><select id="heure" required><option value="08H-11H">08H-11H</option><option value="11H-14H">11H-14H</option><option value="14H-17H">14H-17H</option></select></div>
+                <div class="form-group"><label>Code Matière</label><input type="text" id="code" placeholder="Ex: STIT342(I)" required></div>
+                <div class="form-group full-width"><label>Nom Complet</label><input type="text" id="matiere" placeholder="Ex: Modélisation..." required></div>
+                <div class="form-group"><label>Salle</label><input type="text" id="salle" placeholder="Ex: B13" required></div>
+                <div class="form-group"><label>Enseignant</label><input type="text" id="enseignant" placeholder="Ex: M. NINDJIN" required></div>
+                <div class="form-group"><label>Couleur</label><select id="classeCouleur"><option value="stit341">Bleu Clair</option><option value="stit342">Jaune</option><option value="stit311">Violet</option><option value="stit312">Vert</option><option value="stcu361">Vert Lime</option><option value="stla351">Indigo</option><option value="stpr371">Gris</option></select></div>
                 <button type="submit" class="btn-submit">Ajouter le Cours</button>
             </form>
 
-            <div class="import-section">
-                <h3>🚀 Importation Rapide</h3>
-                <p>Clique ici pour ajouter automatiquement tous les cours du semestre.</p>
-                <button id="btnImport" class="btn-import">Importer les cours par défaut</button>
+            <div id="importSection" class="import-section">
+                <h3>🚀 Importation Automatique</h3>
+                <p>Mettre à jour la base avec les cours de L1, L2 et L3.</p>
+                <button id="btnImport" class="btn-import">Importer TOUS les cours</button>
             </div>
-
-            <div class="course-list">
-                <h2>Liste des Cours Actuels</h2>
-                <div id="coursesContainer">
-                    <p>Chargement...</p>
-                </div>
+            
+            <div class="header-list">
+                <h2 style="margin:0;">Liste des Cours</h2>
+                <button id="btnDeleteAll" class="btn-delete-all">🗑️ Tout Supprimer</button>
             </div>
+            
+            <div id="coursesContainer"><p>Chargement...</p></div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, writeBatch } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         const firebaseConfig = {
@@ -337,12 +129,47 @@
         const adminSection = document.getElementById('adminSection');
         const loginForm = document.getElementById('loginForm');
         const btnLogout = document.getElementById('btnLogout');
-        
         const form = document.getElementById('addCourseForm');
         const coursesContainer = document.getElementById('coursesContainer');
         const btnImport = document.getElementById('btnImport');
+        const btnDeleteAll = document.getElementById('btnDeleteAll');
+        const importSection = document.getElementById('importSection');
 
-        // --- AUTH ---
+        // --- GESTION DYNAMIQUE DES GROUPES ---
+        window.updateGroupOptions = function() {
+            const niveau = document.getElementById('niveau').value;
+            const groupeSelect = document.getElementById('groupe');
+            
+            // On sauvegarde la sélection actuelle si elle existe
+            const previousSelection = groupeSelect.value;
+            
+            groupeSelect.innerHTML = ""; 
+
+            if (niveau === "L1" || niveau === "L2") {
+                const opt1 = new Option("Groupe 1", "Groupe 1");
+                const opt2 = new Option("Groupe 2", "Groupe 2");
+                groupeSelect.add(opt1);
+                groupeSelect.add(opt2);
+            } else if (niveau === "L3") {
+                const opt1 = new Option("Informatique (I)", "Groupe 1");
+                const opt2 = new Option("IMT", "Groupe 2");
+                const opt3 = new Option("EEA", "Groupe 3");
+                groupeSelect.add(opt1);
+                groupeSelect.add(opt2);
+                groupeSelect.add(opt3);
+            }
+            
+            // Essayer de restaurer la sélection si elle est toujours valide pour ce niveau
+            // (ex: si on passe de L1 G1 à L2, on garde G1)
+            // Sinon, le premier élément sera sélectionné par défaut
+            for(let i=0; i<groupeSelect.options.length; i++) {
+                if(groupeSelect.options[i].value === previousSelection) {
+                    groupeSelect.selectedIndex = i;
+                    break;
+                }
+            }
+        }
+
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 loginSection.style.display = 'none';
@@ -351,7 +178,6 @@
             } else {
                 loginSection.style.display = 'block';
                 adminSection.style.display = 'none';
-                coursesContainer.innerHTML = "<p>Connectez-vous pour gérer les cours.</p>";
             }
         });
 
@@ -359,66 +185,147 @@
             e.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            signInWithEmailAndPassword(auth, email, password)
-                .catch((error) => { alert("Erreur de connexion : " + error.message); });
+            signInWithEmailAndPassword(auth, email, password).catch((error) => { alert("Erreur : " + error.message); });
         });
+        btnLogout.addEventListener('click', () => { signOut(auth).then(() => { alert("Déconnecté !"); }).catch(console.error); });
 
-        btnLogout.addEventListener('click', () => {
-            signOut(auth).then(() => { alert("Déconnecté !"); }).catch(console.error);
-        });
-
-        // --- COURS PAR DEFAUT ---
-        const defaultCourses = [
-            { groupe: "Groupe 1", jour: "Lundi", heure: "08H-11H", code: "STIT342(I)", matiere: "Modélisation des systèmes (UML)", salle: "B13", enseignant: "M. NINDJIN", classeCouleur: "stit342" },
-            { groupe: "Groupe 1", jour: "Lundi", heure: "11H-14H", code: "STIT332", matiere: "Intro prog web", salle: "B13", enseignant: "M. NINDJIN", classeCouleur: "stit332" },
-            { groupe: "Groupe 1", jour: "Lundi", heure: "14H-17H", code: "STLA351", matiere: "Anglais sc. et tech.", salle: "B14", enseignant: "M. BALLIET", classeCouleur: "stla351" },
-            { groupe: "Groupe 1", jour: "Mardi", heure: "08H-11H", code: "STIT342(EEA)", matiere: "Automatisme (GRAFCET)", salle: "B12", enseignant: "M. ACHY", classeCouleur: "stit342" },
-            { groupe: "Groupe 1", jour: "Mardi", heure: "14H-17H", code: "STIT312", matiere: "Initiation langage machine", salle: "B16", enseignant: "M. ACHY", classeCouleur: "stit312" },
-            { groupe: "Groupe 1", jour: "Mercredi", heure: "08H-11H", code: "STIT311", matiere: "Théorie des langages", salle: "B7", enseignant: "M. N'GUESSAN", classeCouleur: "stit311" },
-            { groupe: "Groupe 1", jour: "Mercredi", heure: "11H-14H", code: "STIT322", matiere: "Concepts réseaux", salle: "B13", enseignant: "M. N'GBESSO", classeCouleur: "stit322" },
-            { groupe: "Groupe 1", jour: "Mercredi", heure: "14H-17H", code: "STIT321", matiere: "Electronique comm.", salle: "B14", enseignant: "M. YOBOQUET", classeCouleur: "stit321" },
-            { groupe: "Groupe 1", jour: "Jeudi", heure: "14H-17H", code: "STIT342(IMT)", matiere: "Electronique num.", salle: "B13", enseignant: "M. NIAVA", classeCouleur: "stit342" },
-            { groupe: "Groupe 1", jour: "Vendredi", heure: "08H-11H", code: "STCU361", matiere: "S'exprimer pour communiquer", salle: "B18", enseignant: "M. AFFI", classeCouleur: "stcu361" },
-            { groupe: "Groupe 1", jour: "Vendredi", heure: "14H-17H", code: "STIT313", matiere: "Système d'exploitation", salle: "B13", enseignant: "M. AKOSSO", classeCouleur: "stit313" },
-            { groupe: "Groupe 1", jour: "Samedi", heure: "08H-11H", code: "STIT331", matiere: "Prog impérative", salle: "B13", enseignant: "M. CAMARA", classeCouleur: "stit331" },
-            { groupe: "Groupe 1", jour: "Samedi", heure: "11H-14H", code: "STIT341(I)", matiere: "Analyse gestion (MERISE)", salle: "09", enseignant: "M. ANGAMAN", classeCouleur: "stit341" },
-            { groupe: "Groupe 1", jour: "Samedi", heure: "14H-17H", code: "STIT341(I)", matiere: "Analyse gestion (MERISE)", salle: "09", enseignant: "M. ANGAMAN", classeCouleur: "stit341" },
-
-            { groupe: "Groupe 2", jour: "Lundi", heure: "08H-11H", code: "STIT342(I)", matiere: "Modélisation des systèmes (UML)", salle: "B13", enseignant: "M. NINDJIN", classeCouleur: "stit342" },
-            { groupe: "Groupe 2", jour: "Lundi", heure: "14H-17H", code: "STLA351", matiere: "Anglais sc. et tech.", salle: "B2", enseignant: "M. KONE AMIDOU", classeCouleur: "stla351" },
-            { groupe: "Groupe 2", jour: "Mardi", heure: "08H-11H", code: "STIT342(EEA)", matiere: "Automatisme (GRAFCET)", salle: "B12", enseignant: "M. ACHY", classeCouleur: "stit342" },
-            { groupe: "Groupe 2", jour: "Mardi", heure: "11H-14H", code: "STIT312", matiere: "Initiation langage machine", salle: "B10", enseignant: "M. ACHY", classeCouleur: "stit312" },
-            { groupe: "Groupe 2", jour: "Mardi", heure: "14H-17H", code: "STIT321", matiere: "Electronique comm.", salle: "B10", enseignant: "M. YOBOQUET", classeCouleur: "stit321" },
-            { groupe: "Groupe 2", jour: "Mercredi", heure: "08H-11H", code: "STIT322", matiere: "Concepts réseaux", salle: "B10", enseignant: "M. N'GBESSO", classeCouleur: "stit322" },
-            { groupe: "Groupe 2", jour: "Mercredi", heure: "14H-17H", code: "STCU361", matiere: "S'exprimer pour communiquer", salle: "B13", enseignant: "M. AFFI", classeCouleur: "stcu361" },
-            { groupe: "Groupe 2", jour: "Jeudi", heure: "08H-11H", code: "STIT311", matiere: "Théorie des langages", salle: "B20", enseignant: "M. N'GUESSAN", classeCouleur: "stit311" },
-            { groupe: "Groupe 2", jour: "Jeudi", heure: "11H-14H", code: "STIT332", matiere: "Intro prog web", salle: "B13", enseignant: "M. NINDJIN", classeCouleur: "stit332" },
-            { groupe: "Groupe 2", jour: "Jeudi", heure: "14H-17H", code: "STIT341(EEA)", matiere: "Electronique puissance", salle: "B12", enseignant: "M. NEMLIN", classeCouleur: "stit341" },
-            { groupe: "Groupe 2", jour: "Vendredi", heure: "08H-11H", code: "STIT331", matiere: "Prog impérative", salle: "B13", enseignant: "M. GONO", classeCouleur: "stit331" },
-            { groupe: "Groupe 2", jour: "Vendredi", heure: "11H-14H", code: "STIT313", matiere: "Système d'exploitation", salle: "B13", enseignant: "M. GONO", classeCouleur: "stit313" },
-            { groupe: "Groupe 2", jour: "Samedi", heure: "11H-14H", code: "STIT341(IMT)", matiere: "Traitement signal", salle: "B16", enseignant: "M. N'GUESSAN", classeCouleur: "stit341" }
+        // --- DONNÉES (Liste complète déjà fournie précédemment, je garde la structure) ---
+        const allLevelsCourses = [
+            // ... (Ta longue liste de cours reste ici, identique à la version précédente) ...
+            // Pour que ça marche sans que tu aies à tout recoller, je remets la liste complète ici :
+            { niveau: "L1", groupe: "Groupe 1", jour: "Lundi", heure: "08H-11H", code: "STRE142", matiere: "Structure matière", salle: "B6", enseignant: "M. ZAKA", classeCouleur: "stit341" },
+            { niveau: "L1", groupe: "Groupe 1", jour: "Lundi", heure: "11H-14H", code: "STLA151", matiere: "Anglais sc.", salle: "B18", enseignant: "M. KONE AMIDOU", classeCouleur: "stla351" },
+            { niveau: "L1", groupe: "Groupe 1", jour: "Mardi", heure: "08H-11H", code: "STIT133", matiere: "Composants élec", salle: "B19", enseignant: "M. YOBOUET", classeCouleur: "stit342" },
+            { niveau: "L1", groupe: "Groupe 1", jour: "Mardi", heure: "11H-14H", code: "STMU121", matiere: "Physique", salle: "B3", enseignant: "M. ZAKA", classeCouleur: "stit311" },
+            { niveau: "L1", groupe: "Groupe 1", jour: "Mardi", heure: "14H-17H", code: "STRE141", matiere: "Hist. Sciences", salle: "B20", enseignant: "M. TOURE", classeCouleur: "stit312" },
+            { niveau: "L1", groupe: "Groupe 1", jour: "Mercredi", heure: "08H-11H", code: "STIT131", matiere: "Algo & Prog", salle: "09", enseignant: "M. CAMARA", classeCouleur: "stit312" },
+            { niveau: "L1", groupe: "Groupe 1", jour: "Mercredi", heure: "11H-14H", code: "STIT132", matiere: "Numération", salle: "B14", enseignant: "M. AKOSSO", classeCouleur: "stit313" },
+            { niveau: "L1", groupe: "Groupe 1", jour: "Mercredi", heure: "14H-17H", code: "STCU161", matiere: "Eco & Gestion", salle: "B18", enseignant: "M. KOKOBOU", classeCouleur: "stcu361" },
+            { niveau: "L1", groupe: "Groupe 1", jour: "Jeudi", heure: "08H-11H", code: "STMU111", matiere: "Algèbre", salle: "B16", enseignant: "M. KOSSA", classeCouleur: "stpr371" },
+            { niveau: "L1", groupe: "Groupe 1", jour: "Jeudi", heure: "11H-14H", code: "STMU112", matiere: "Analyse", salle: "B15", enseignant: "M. YAVO", classeCouleur: "stpr371" },
+            { niveau: "L1", groupe: "Groupe 1", jour: "Vendredi", heure: "11H-14H", code: "STPR172", matiere: "Tech. Travail Univ.", salle: "B7", enseignant: "M. PIKOULAS", classeCouleur: "stla351" },
+            { niveau: "L1", groupe: "Groupe 1", jour: "Vendredi", heure: "14H-17H", code: "STLA152", matiere: "Tech. Expression", salle: "B6", enseignant: "M. AFFI", classeCouleur: "stla351" },
+            { niveau: "L1", groupe: "Groupe 1", jour: "Samedi", heure: "11H-14H", code: "STPR171", matiere: "Projet Pro", salle: "B16", enseignant: "M. PIKOULAS", classeCouleur: "stla351" },
+            { niveau: "L1", groupe: "Groupe 2", jour: "Lundi", heure: "08H-11H", code: "STRE141", matiere: "Hist. Sciences", salle: "B1", enseignant: "M. TOURE", classeCouleur: "stit341" },
+            { niveau: "L1", groupe: "Groupe 2", jour: "Lundi", heure: "11H-14H", code: "STLA151", matiere: "Anglais", salle: "B14", enseignant: "M. BALLIET", classeCouleur: "stla351" },
+            { niveau: "L1", groupe: "Groupe 2", jour: "Lundi", heure: "14H-17H", code: "STCU161", matiere: "Eco & Gestion", salle: "B7", enseignant: "M. KOKOBOU", classeCouleur: "stcu361" },
+            { niveau: "L1", groupe: "Groupe 2", jour: "Mardi", heure: "08H-11H", code: "STMU121", matiere: "Physique", salle: "B15", enseignant: "M. ZAKA", classeCouleur: "stit311" },
+            { niveau: "L1", groupe: "Groupe 2", jour: "Mardi", heure: "11H-14H", code: "STIT133", matiere: "Composants élec", salle: "B8", enseignant: "M. YOBOUET", classeCouleur: "stit342" },
+            { niveau: "L1", groupe: "Groupe 2", jour: "Mardi", heure: "14H-17H", code: "STPR172", matiere: "Tech. Travail Univ.", salle: "B14", enseignant: "M. PIKOULAS", classeCouleur: "stla351" },
+            { niveau: "L1", groupe: "Groupe 2", jour: "Mercredi", heure: "08H-11H", code: "STIT131", matiere: "Algo & Prog", salle: "B13", enseignant: "M. GONO", classeCouleur: "stit312" },
+            { niveau: "L1", groupe: "Groupe 2", jour: "Jeudi", heure: "08H-11H", code: "STRE142", matiere: "Structure matière", salle: "B5/B14", enseignant: "M. ZAKA", classeCouleur: "stit341" },
+            { niveau: "L1", groupe: "Groupe 2", jour: "Jeudi", heure: "11H-14H", code: "STIT132", matiere: "Numération", salle: "B13", enseignant: "M. GONO", classeCouleur: "stit313" },
+            { niveau: "L1", groupe: "Groupe 2", jour: "Jeudi", heure: "14H-17H", code: "STMU112", matiere: "Analyse", salle: "B8", enseignant: "M. YAVO", classeCouleur: "stpr371" },
+            { niveau: "L1", groupe: "Groupe 2", jour: "Vendredi", heure: "08H-11H", code: "STMU111", matiere: "Algèbre", salle: "B4", enseignant: "M. KOSSA", classeCouleur: "stpr371" },
+            { niveau: "L1", groupe: "Groupe 2", jour: "Vendredi", heure: "11H-14H", code: "STLA152", matiere: "Tech. Expression", salle: "B2", enseignant: "M. AFFI", classeCouleur: "stla351" },
+            { niveau: "L1", groupe: "Groupe 2", jour: "Samedi", heure: "08H-11H", code: "STPR171", matiere: "Projet Pro", salle: "B3", enseignant: "M. PIKOULAS", classeCouleur: "stla351" },
+            { niveau: "L3", groupe: "Groupe 1", jour: "Mardi", heure: "08H-11H", code: "STIT512", matiere: "Proba Stat", salle: "B4", enseignant: "M. YAVO", classeCouleur: "stit341" },
+            { niveau: "L3", groupe: "Groupe 1", jour: "Mercredi", heure: "08H-11H", code: "STCU581", matiere: "Entreprenariat", salle: "B2", enseignant: "M. KOKOBOU", classeCouleur: "stcu361" },
+            { niveau: "L3", groupe: "Groupe 1", jour: "Mercredi", heure: "11H-14H", code: "STIT511", matiere: "Graphes", salle: "B6", enseignant: "M. N'GUESSAN", classeCouleur: "stit311" },
+            { niveau: "L3", groupe: "Groupe 1", jour: "Mercredi", heure: "14H-17H", code: "STLA571", matiere: "Anglais", salle: "B4", enseignant: "M. BALLIET", classeCouleur: "stla351" },
+            { niveau: "L3", groupe: "Groupe 1", jour: "Jeudi", heure: "08H-11H", code: "STI1531", matiere: "Prog Web Dyn", salle: "B13", enseignant: "M. NINDJIN", classeCouleur: "stit332" },
+            { niveau: "L3", groupe: "Groupe 1", jour: "Jeudi", heure: "14H-17H", code: "STIT522", matiere: "Qualité", salle: "B3", enseignant: "M. N'GBESSO", classeCouleur: "stit322" },
+            { niveau: "L3", groupe: "Groupe 1", jour: "Vendredi", heure: "11H-14H", code: "STII541", matiere: "IHM", salle: "B10", enseignant: "M. AKOSSO", classeCouleur: "stit313" },
+            { niveau: "L3", groupe: "Groupe 1", jour: "Vendredi", heure: "14H-17H", code: "STPR591", matiere: "Projet Tutoré", salle: "B1", enseignant: "M. KOUAME TOTO", classeCouleur: "stla351" },
+            { niveau: "L3", groupe: "Groupe 1", jour: "Samedi", heure: "08H-11H", code: "STII561", matiere: "Génie Logiciel", salle: "B10", enseignant: "M. ANGAMAN", classeCouleur: "stit341" },
+            { niveau: "L3", groupe: "Groupe 1", jour: "Samedi", heure: "11H-14H", code: "STII551", matiere: "IA", salle: "B13", enseignant: "M. CAMARA", classeCouleur: "stit331" },
+            { niveau: "L3", groupe: "Groupe 1", jour: "Samedi", heure: "14H-17H", code: "STIT521", matiere: "Gestion Projet", salle: "B15", enseignant: "M. N'GBESSO", classeCouleur: "stit322" },
+            { niveau: "L3", groupe: "Groupe 2", jour: "Mardi", heure: "08H-11H", code: "STIM551", matiere: "Fibre Optique", salle: "B13", enseignant: "M. NIAVA", classeCouleur: "stit342" },
+            { niveau: "L3", groupe: "Groupe 2", jour: "Mardi", heure: "11H-14H", code: "STIM531", matiere: "Propagation", salle: "B13", enseignant: "M. ZAKA", classeCouleur: "stit312" },
+            { niveau: "L3", groupe: "Groupe 2", jour: "Mercredi", heure: "08H-11H", code: "STCU581", matiere: "Entreprenariat", salle: "B2", enseignant: "M. KOKOBOU", classeCouleur: "stcu361" },
+            { niveau: "L3", groupe: "Groupe 2", jour: "Mercredi", heure: "11H-14H", code: "STIT511", matiere: "Graphes", salle: "B6", enseignant: "M. N'GUESSAN", classeCouleur: "stit311" },
+            { niveau: "L3", groupe: "Groupe 2", jour: "Mercredi", heure: "14H-17H", code: "STLA571", matiere: "Anglais", salle: "B4", enseignant: "M. BALLIET", classeCouleur: "stla351" },
+            { niveau: "L3", groupe: "Groupe 2", jour: "Jeudi", heure: "14H-17H", code: "STIT522", matiere: "Qualité", salle: "B3", enseignant: "M. N'GBESSO", classeCouleur: "stit322" },
+            { niveau: "L3", groupe: "Groupe 2", jour: "Vendredi", heure: "08H-11H", code: "STIM541", matiere: "Prog Syst Res", salle: "B14", enseignant: "M. AKOSSO", classeCouleur: "stit313" },
+            { niveau: "L3", groupe: "Groupe 2", jour: "Vendredi", heure: "11H-14H", code: "STIM561", matiere: "Elec Trans", salle: "B14", enseignant: "M. NIAVA", classeCouleur: "stit342" },
+            { niveau: "L3", groupe: "Groupe 2", jour: "Vendredi", heure: "14H-17H", code: "STPR591", matiere: "Projet Tutoré", salle: "B1", enseignant: "M. KOUAME TOTO", classeCouleur: "stla351" },
+            { niveau: "L3", groupe: "Groupe 2", jour: "Samedi", heure: "14H-17H", code: "STIT521", matiere: "Gestion Projet", salle: "B15", enseignant: "M. N'GBESSO", classeCouleur: "stit322" },
+            { niveau: "L3", groupe: "Groupe 3", jour: "Lundi", heure: "11H-14H", code: "STIT512", matiere: "Proba Stat", salle: "B4", enseignant: "M. YAVO", classeCouleur: "stit341" },
+            { niveau: "L3", groupe: "Groupe 3", jour: "Mardi", heure: "08H-11H", code: "STEA531", matiere: "Automatique Syst", salle: "B12", enseignant: "M. NEMLIN", classeCouleur: "stpr371" },
+            { niveau: "L3", groupe: "Groupe 3", jour: "Mardi", heure: "11H-14H", code: "STEA541", matiere: "Bureau Etude MATLAB", salle: "B12", enseignant: "M. NEMLIN", classeCouleur: "stpr371" },
+            { niveau: "L3", groupe: "Groupe 3", jour: "Mercredi", heure: "08H-11H", code: "STCU581", matiere: "Entreprenariat", salle: "B2", enseignant: "M. KOKOBOU", classeCouleur: "stcu361" },
+            { niveau: "L3", groupe: "Groupe 3", jour: "Mercredi", heure: "11H-14H", code: "STIT511", matiere: "Graphes", salle: "B6", enseignant: "M. N'GUESSAN", classeCouleur: "stit311" },
+            { niveau: "L3", groupe: "Groupe 3", jour: "Mercredi", heure: "14H-17H", code: "STLA571", matiere: "Anglais", salle: "B4", enseignant: "M. BALLIET", classeCouleur: "stla351" },
+            { niveau: "L3", groupe: "Groupe 3", jour: "Jeudi", heure: "08H-11H", code: "STEA561", matiere: "Automatique Evt", salle: "B12", enseignant: "M. ADOPO", classeCouleur: "stpr371" },
+            { niveau: "L3", groupe: "Groupe 3", jour: "Jeudi", heure: "11H-14H", code: "STEA551", matiere: "Outils Elec", salle: "B12", enseignant: "M. NEMLIN", classeCouleur: "stpr371" },
+            { niveau: "L3", groupe: "Groupe 3", jour: "Jeudi", heure: "14H-17H", code: "STIT522", matiere: "Qualité", salle: "B3", enseignant: "M. N'GBESSO", classeCouleur: "stit322" },
+            { niveau: "L3", groupe: "Groupe 3", jour: "Vendredi", heure: "14H-17H", code: "STPR591", matiere: "Projet Tutoré", salle: "B1", enseignant: "M. KOUAME TOTO", classeCouleur: "stla351" },
+            { niveau: "L3", groupe: "Groupe 3", jour: "Samedi", heure: "14H-17H", code: "STIT521", matiere: "Gestion Projet", salle: "B15", enseignant: "M. N'GBESSO", classeCouleur: "stit322" },
+            { niveau: "L2", groupe: "Groupe 1", jour: "Lundi", heure: "08H-11H", code: "STIT342(I)", matiere: "Modélisation systèmes", salle: "B13", enseignant: "M. NINDJIN", classeCouleur: "stit342" },
+            { niveau: "L2", groupe: "Groupe 1", jour: "Lundi", heure: "11H-14H", code: "STIT332", matiere: "Intro prog web", salle: "B13", enseignant: "M. NINDJIN", classeCouleur: "stit332" },
+            { niveau: "L2", groupe: "Groupe 1", jour: "Lundi", heure: "14H-17H", code: "STLA351", matiere: "Anglais", salle: "B14", enseignant: "M. BALLIET", classeCouleur: "stla351" },
+            { niveau: "L2", groupe: "Groupe 1", jour: "Mardi", heure: "08H-11H", code: "STIT342(EEA)", matiere: "Automatisme", salle: "B12", enseignant: "M. ACHY", classeCouleur: "stit342" },
+            { niveau: "L2", groupe: "Groupe 1", jour: "Mardi", heure: "14H-17H", code: "STIT312", matiere: "Langage machine", salle: "B16", enseignant: "M. ACHY", classeCouleur: "stit312" },
+            { niveau: "L2", groupe: "Groupe 1", jour: "Mercredi", heure: "08H-11H", code: "STIT311", matiere: "Théorie des langages", salle: "B7", enseignant: "M. N'GUESSAN", classeCouleur: "stit311" },
+            { niveau: "L2", groupe: "Groupe 1", jour: "Mercredi", heure: "11H-14H", code: "STIT322", matiere: "Concepts réseaux", salle: "B13", enseignant: "M. N'GBESSO", classeCouleur: "stit322" },
+            { niveau: "L2", groupe: "Groupe 1", jour: "Mercredi", heure: "14H-17H", code: "STIT321", matiere: "Elec comm.", salle: "B14", enseignant: "M. YOBOQUET", classeCouleur: "stit321" },
+            { niveau: "L2", groupe: "Groupe 1", jour: "Jeudi", heure: "14H-17H", code: "STIT342(IMT)", matiere: "Elec num.", salle: "B13", enseignant: "M. NIAVA", classeCouleur: "stit342" },
+            { niveau: "L2", groupe: "Groupe 1", jour: "Vendredi", heure: "08H-11H", code: "STCU361", matiere: "Communication", salle: "B18", enseignant: "M. AFFI", classeCouleur: "stcu361" },
+            { niveau: "L2", groupe: "Groupe 1", jour: "Vendredi", heure: "14H-17H", code: "STIT313", matiere: "Système d'exploitation", salle: "B13", enseignant: "M. AKOSSO", classeCouleur: "stit313" },
+            { niveau: "L2", groupe: "Groupe 1", jour: "Samedi", heure: "08H-11H", code: "STIT331", matiere: "Prog impérative", salle: "B13", enseignant: "M. CAMARA", classeCouleur: "stit331" },
+            { niveau: "L2", groupe: "Groupe 1", jour: "Samedi", heure: "11H-14H", code: "STIT341(I)", matiere: "Analyse gestion", salle: "09", enseignant: "M. ANGAMAN", classeCouleur: "stit341" },
+            { niveau: "L2", groupe: "Groupe 1", jour: "Samedi", heure: "14H-17H", code: "STIT341(I)", matiere: "Analyse gestion", salle: "09", enseignant: "M. ANGAMAN", classeCouleur: "stit341" },
+            { niveau: "L2", groupe: "Groupe 2", jour: "Lundi", heure: "08H-11H", code: "STIT342(I)", matiere: "Modélisation", salle: "B13", enseignant: "M. NINDJIN", classeCouleur: "stit342" },
+            { niveau: "L2", groupe: "Groupe 2", jour: "Lundi", heure: "14H-17H", code: "STLA351", matiere: "Anglais", salle: "B2", enseignant: "M. KONE AMIDOU", classeCouleur: "stla351" },
+            { niveau: "L2", groupe: "Groupe 2", jour: "Mardi", heure: "08H-11H", code: "STIT342(EEA)", matiere: "Automatisme", salle: "B12", enseignant: "M. ACHY", classeCouleur: "stit342" },
+            { niveau: "L2", groupe: "Groupe 2", jour: "Mardi", heure: "11H-14H", code: "STIT312", matiere: "Langage machine", salle: "B10", enseignant: "M. ACHY", classeCouleur: "stit312" },
+            { niveau: "L2", groupe: "Groupe 2", jour: "Mardi", heure: "14H-17H", code: "STIT321", matiere: "Elec comm.", salle: "B10", enseignant: "M. YOBOQUET", classeCouleur: "stit321" },
+            { niveau: "L2", groupe: "Groupe 2", jour: "Mercredi", heure: "08H-11H", code: "STIT322", matiere: "Concepts réseaux", salle: "B10", enseignant: "M. N'GBESSO", classeCouleur: "stit322" },
+            { niveau: "L2", groupe: "Groupe 2", jour: "Mercredi", heure: "14H-17H", code: "STCU361", matiere: "Communication", salle: "B13", enseignant: "M. AFFI", classeCouleur: "stcu361" },
+            { niveau: "L2", groupe: "Groupe 2", jour: "Jeudi", heure: "08H-11H", code: "STIT311", matiere: "Théorie des langages", salle: "B20", enseignant: "M. N'GUESSAN", classeCouleur: "stit311" },
+            { niveau: "L2", groupe: "Groupe 2", jour: "Jeudi", heure: "11H-14H", code: "STIT332", matiere: "Intro prog web", salle: "B13", enseignant: "M. NINDJIN", classeCouleur: "stit332" },
+            { niveau: "L2", groupe: "Groupe 2", jour: "Jeudi", heure: "14H-17H", code: "STIT341(EEA)", matiere: "Elec puissance", salle: "B12", enseignant: "M. NEMLIN", classeCouleur: "stit341" },
+            { niveau: "L2", groupe: "Groupe 2", jour: "Vendredi", heure: "08H-11H", code: "STIT331", matiere: "Prog impérative", salle: "B13", enseignant: "M. GONO", classeCouleur: "stit331" },
+            { niveau: "L2", groupe: "Groupe 2", jour: "Vendredi", heure: "11H-14H", code: "STIT313", matiere: "Système d'exploitation", salle: "B13", enseignant: "M. GONO", classeCouleur: "stit313" },
+            { niveau: "L2", groupe: "Groupe 2", jour: "Samedi", heure: "11H-14H", code: "STIT341(IMT)", matiere: "Traitement signal", salle: "B16", enseignant: "M. N'GUESSAN", classeCouleur: "stit341" }
         ];
 
-        // --- LOGIQUE ---
+        btnDeleteAll.addEventListener('click', async () => {
+            if(confirm("⚠️ ATTENTION : Vous allez supprimer TOUS les cours de la base de données ! Êtes-vous sûr ?")) {
+                btnDeleteAll.disabled = true;
+                btnDeleteAll.innerText = "Suppression en cours...";
+                
+                const querySnapshot = await getDocs(collection(db, "cours"));
+                const batch = writeBatch(db);
+
+                querySnapshot.forEach((doc) => {
+                    batch.delete(doc.ref);
+                });
+
+                await batch.commit();
+                
+                alert("Tous les cours ont été supprimés !");
+                btnDeleteAll.innerText = "🗑️ Tout Supprimer";
+                btnDeleteAll.disabled = false;
+                loadCourses();
+            }
+        });
+
         btnImport.addEventListener('click', async () => {
-            if(confirm(`Voulez-vous vraiment importer ${defaultCourses.length} cours ?`)) {
-                btnImport.disabled = true;
-                btnImport.innerText = "Importation en cours...";
+            if(confirm(`Importer ${allLevelsCourses.length} cours ?`)) {
+                btnImport.disabled = true; btnImport.innerText = "En cours...";
                 let count = 0;
-                for (const course of defaultCourses) {
+                for (const course of allLevelsCourses) {
                     try { await addDoc(collection(db, "cours"), course); count++; } 
                     catch (e) { console.error(e); }
                 }
-                alert(`${count} cours importés !`);
-                btnImport.innerText = "Importation Terminée";
+                alert(`${count} cours importés !`); btnImport.innerText = "Terminé"; 
+                importSection.style.display = 'none';
                 loadCourses(); 
             }
         });
 
+        // --- LOGIQUE INTELLIGENTE DE FORMULAIRE (Mémorisation) ---
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            // 1. On récupère les valeurs AVANT le reset
+            const niveauVal = document.getElementById('niveau').value;
+            const groupeVal = document.getElementById('groupe').value;
+
             const newCourse = {
-                groupe: document.getElementById('groupe').value,
+                niveau: niveauVal, 
+                groupe: groupeVal,
                 jour: document.getElementById('jour').value,
                 heure: document.getElementById('heure').value,
                 code: document.getElementById('code').value,
@@ -427,43 +334,44 @@
                 enseignant: document.getElementById('enseignant').value,
                 classeCouleur: document.getElementById('classeCouleur').value
             };
-            try {
-                await addDoc(collection(db, "cours"), newCourse);
-                alert("Cours ajouté !");
-                form.reset();
-                loadCourses();
-            } catch (error) { alert("Erreur : " + error.message); }
+
+            try { 
+                await addDoc(collection(db, "cours"), newCourse); 
+                alert("Ajouté !"); 
+                
+                // 2. On reset le formulaire
+                form.reset(); 
+
+                // 3. On RESTAURE les valeurs mémorisées
+                document.getElementById('niveau').value = niveauVal;
+                
+                // Important : on doit re-déclencher la mise à jour des groupes
+                // car le reset a pu tout casser
+                updateGroupOptions(); 
+                
+                document.getElementById('groupe').value = groupeVal;
+
+                loadCourses(); 
+            } 
+            catch (error) { alert("Erreur : " + error.message); }
         });
 
         async function loadCourses() {
             coursesContainer.innerHTML = "Chargement...";
             const querySnapshot = await getDocs(collection(db, "cours"));
             coursesContainer.innerHTML = "";
-            if (querySnapshot.empty) { coursesContainer.innerHTML = "<p>Aucun cours trouvé.</p>"; return; }
-
             querySnapshot.forEach((docSnap) => {
-                const course = docSnap.data();
-                const id = docSnap.id;
+                const c = docSnap.data();
                 const div = document.createElement('div');
                 div.className = 'course-item';
-                div.innerHTML = `
-                    <div>
-                        <strong>${course.groupe}</strong> - ${course.jour} ${course.heure}<br>
-                        ${course.code} - ${course.enseignant}
-                    </div>
-                    <button class="btn-delete" onclick="deleteCourse('${id}')">Supprimer</button>
-                `;
+                div.innerHTML = `<div><small>${c.niveau}</small> <strong>${c.groupe}</strong> - ${c.jour} ${c.heure}<br>${c.code} - ${c.enseignant}</div><button class="btn-delete" onclick="deleteCourse('${docSnap.id}')">X</button>`;
                 coursesContainer.appendChild(div);
             });
         }
 
         window.deleteCourse = async (id) => {
-            if(confirm("Supprimer ?")) {
-                await deleteDoc(doc(db, "cours", id));
-                loadCourses();
-            }
+            if(confirm("Supprimer ?")) { await deleteDoc(doc(db, "cours", id)); loadCourses(); }
         }
     </script>
-
 </body>
 </html>

@@ -3,124 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Application L2 ITER - Semestre 3</title>
+    <title>Emploi du Temps - ITER</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#3498db">
+    <meta name="theme-color" content="#4e54c8">
+    <link rel="apple-touch-icon" href="icon-192.png">
 </head>
 <body>
 
-    <h1>Emploi du Temps L2 INFORMATIQUE TELECOMMUNICATION ELECTRONIQUE RESEAU</h1>
-    <h2>SEMESTRE 3</h2>
-
-    <!-- Tableau de Bord -->
-    <div id="dashboard-container">
-        <div id="dashboard-icon">💡</div>
-        <div id="dashboard-message">Chargement des données...</div>
-    </div>
-
-    <!-- Barre de Filtres -->
-    <div id="filter-bar">
-         <div class="filter-group">
-            <label for="filter-teacher">Filtrer par Enseignant :</label>
-            <select id="filter-teacher">
-                <option value="tous">-- Tous les enseignants --</option>
-                <option value="M.ACHY">M. ACHY</option>
-                <option value="M.NINDJIN">M. NINDJIN</option>
-                <option value="M.N'GUESSAN">M. N'GUESSAN</option>
-                <option value="M.ANGAMAN">M. ANGAMAN</option>
-                <option value="M.GONO">M. GONO</option>
-                <option value="M.BALLIET">M. BALLIET</option>
-                <option value="M.N'GBESSO">M. N'GBESSO</option>
-                <option value="M.YOBOQUET">M. YOBOQUET</option>
-                <option value="M.NIAVA">M. NIAVA</option>
-                <option value="M.AKOSSO">M. AKOSSO</option>
-                <option value="M.CAMARA">M. CAMARA</option>
-                <option value="M.AFFI">M. AFFI</option>
-                <option value="M.KONE AMIDOU">M. KONE AMIDOU</option>
-                <option value="M.NEMLIN">M. NEMLIN</option>
-            </select>
-        </div>
-        <div class="filter-group">
-            <label for="filter-subject">Filtrer par Matière (Code) :</label>
-            <select id="filter-subject">
-                <option value="tous">-- Toutes les matières --</option>
-                <option value="STIT341">STIT341</option>
-                <option value="STIT342">STIT342</option>
-                <option value="STIT311">STIT311</option>
-                <option value="STIT312">STIT312</option>
-                <option value="STIT313">STIT313</option>
-                <option value="STIT321">STIT321</option>
-                <option value="STIT322">STIT322</option>
-                <option value="STIT331">STIT331</option>
-                <option value="STIT332">STIT332</option>
-                <option value="STLA351">STLA351</option>
-                <option value="STCU361">STCU361</option>
-            </select>
-        </div>
-        <div class="filter-group" style="justify-content: flex-end;">
-            <button id="reset-filters">Réinitialiser</button>
-        </div>
-    </div>
-
-    <div class="container">
+    <!-- ÉCRAN DE SÉLECTION DU NIVEAU -->
+    <div id="level-selector">
+        <img src="icon-192.png" width="100" style="margin-bottom: 30px; border-radius: 25px; box-shadow: 0 10px 30px rgba(78, 84, 200, 0.2);">
         
-        <!-- Navigation par onglets -->
-        <nav class="tab-nav">
-            <button class="tab-button active" onclick="showTab('groupe1')">Groupe 1</button>
-            <button class="tab-button" onclick="showTab('groupe2')">Groupe 2</button>
-        </nav>
+        <div class="welcome-text">
+            👋 <strong>Bonjour !</strong><br>
+            Bienvenue sur l'emploi du temps du département <strong>ITER</strong> de l'UTT-LOKO.<br>
+            <span style="color:#7f8c8d; font-size:0.9em; display:block; margin-top:10px;">Veuillez choisir votre niveau SVP :</span>
+        </div>
+        
+        <div class="level-cards-container">
+            <button class="level-btn lvl-1" onclick="selectLevel('L1')">
+                <span>Licence 1</span> <span class="level-emoji">🐣</span>
+            </button>
+            <button class="level-btn lvl-2" onclick="selectLevel('L2')">
+                <span>Licence 2</span> <span class="level-emoji">🦅</span>
+            </button>
+            <button class="level-btn lvl-3" onclick="selectLevel('L3')">
+                <span>Licence 3</span> <span class="level-emoji">🎓</span>
+            </button>
+        </div>
+        <p style="margin-top: 40px; color: #bdc3c7; font-size: 0.8rem;">v3.0 • UTT LOKO</p>
+    </div>
 
-        <!-- Contenu Onglet 1: Groupe 1 -->
-        <div id="groupe1" class="content-section active">
-            <h3>TRONC COMMUN L2 SEMESTRE 3 GROUPE 1</h3>
-            
-            <div class="table-wrapper">
-                <table class="schedule-table">
-                    <thead>
-                        <tr> <th></th> <th colspan="3">08H-11H</th> <th colspan="3">11H-14H</th> <th colspan="3">14H-17H</th> </tr>
-                        <tr> <th>Jour</th> <th>Code</th><th>Salle</th><th>Enseignant</th> <th>Code</th><th>Salle</th><th>Enseignant</th> <th>Code</th><th>Salle</th><th>Enseignant</th> </tr>
-                    </thead>
-                    <!-- Le corps du tableau est maintenant VIDE. C'est JavaScript qui va le remplir ! -->
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
+    <!-- APPLICATION PRINCIPALE -->
+    <div id="app-content" class="hidden">
+        <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <h1 id="main-title" style="margin:0; text-align:left;">Emploi du Temps</h1>
+            <span id="change-level" onclick="resetLevel()">🔄 Changer</span>
         </div>
 
-        <!-- Contenu Onglet 2: Groupe 2 -->
-        <div id="groupe2" class="content-section">
-            <h3>TRONC COMMUN L2 SEMESTRE 3 GROUPE 2</h3>
-            
-            <div class="table-wrapper">
-                <table class="schedule-table">
-                    <thead>
-                        <tr> <th></th> <th colspan="3">08H-11H</th> <th colspan="3">11H-14H</th> <th colspan="3">14H-17H</th> </tr>
-                        <tr> <th>Jour</th> <th>Code</th><th>Salle</th><th>Enseignant</th> <th>Code</th><th>Salle</th><th>Enseignant</th> <th>Code</th><th>Salle</th><th>Enseignant</th> </tr>
-                    </thead>
-                    <!-- Le corps du tableau est maintenant VIDE. -->
-                    <tbody>
-                    </tbody>
-                </table>
+        <div id="dashboard-container">
+            <div id="dashboard-icon">📅</div>
+            <div id="dashboard-message">Chargement des données en cours...</div>
+        </div>
+
+        <div id="filter-bar">
+            <div class="filter-group"><label>👨‍🏫 Enseignant</label><select id="filter-teacher"><option value="tous">-- Tous --</option></select></div>
+            <div class="filter-group"><label>📚 Matière</label><select id="filter-subject"><option value="tous">-- Toutes --</option></select></div>
+            <div class="filter-group" style="justify-content: flex-end;"><button id="reset-filters">🗑️ Reset</button></div>
+        </div>
+
+        <div class="container">
+            <nav class="tab-nav">
+                <button id="tab-g1" class="tab-button active" onclick="showTab('groupe1')">Groupe 1</button>
+                <button id="tab-g2" class="tab-button" onclick="showTab('groupe2')">Groupe 2</button>
+                <button id="tab-g3" class="tab-button" onclick="showTab('groupe3')">Groupe 3</button>
+            </nav>
+
+            <!-- TABLEAUX (Avec en-têtes complets) -->
+            <div id="groupe1" class="content-section active">
+                <h3 id="title-g1" style="color:#4e54c8; border-left:5px solid #4e54c8; padding-left:10px;">GROUPE 1</h3>
+                <div class="table-wrapper">
+                    <table class="schedule-table">
+                        <thead>
+                            <tr><th></th><th colspan="3">08H-11H</th><th colspan="3">11H-14H</th><th colspan="3">14H-17H</th></tr>
+                            <tr><th>Jour</th><th>Code</th><th>Salle</th><th>Prof.</th><th>Code</th><th>Salle</th><th>Prof.</th><th>Code</th><th>Salle</th><th>Prof.</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="groupe2" class="content-section">
+                <h3 id="title-g2" style="color:#4e54c8; border-left:5px solid #4e54c8; padding-left:10px;">GROUPE 2</h3>
+                <div class="table-wrapper">
+                    <table class="schedule-table">
+                        <thead>
+                            <tr><th></th><th colspan="3">08H-11H</th><th colspan="3">11H-14H</th><th colspan="3">14H-17H</th></tr>
+                            <tr><th>Jour</th><th>Code</th><th>Salle</th><th>Prof.</th><th>Code</th><th>Salle</th><th>Prof.</th><th>Code</th><th>Salle</th><th>Prof.</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="groupe3" class="content-section">
+                <h3 id="title-g3" style="color:#4e54c8; border-left:5px solid #4e54c8; padding-left:10px;">GROUPE 3</h3>
+                <div class="table-wrapper">
+                    <table class="schedule-table">
+                        <thead>
+                            <tr><th></th><th colspan="3">08H-11H</th><th colspan="3">11H-14H</th><th colspan="3">14H-17H</th></tr>
+                            <tr><th>Jour</th><th>Code</th><th>Salle</th><th>Prof.</th><th>Code</th><th>Salle</th><th>Prof.</th><th>Code</th><th>Salle</th><th>Prof.</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Structure de la Modale -->
+    <!-- MODALE (Avec IA réintégrée) -->
     <div id="modal-container" onclick="closeModal()">
         <div id="modal-box" onclick="event.stopPropagation()">
-            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <div class="modal-close" onclick="closeModal()">×</div>
             <h3 id="modal-title">Détails du Cours</h3>
-            <p><strong>Matière :</strong> <span id="modal-matiere"></span></p>
-            <p><strong>Code :</strong> <span id="modal-code"></span></p>
-            <p><strong>Enseignant :</strong> <span id="modal-enseignant"></span></p>
-            <p><strong>Salle :</strong> <span id="modal-salle"></span></p>
-            <p><strong>Horaire :</strong> <span id="modal-horaire"></span></p>
+            <p><strong>📚 Matière :</strong> <span id="modal-matiere"></span> <span id="modal-code" style="color: #7f8c8d; font-size: 0.9em;"></span></p>
+            <p><strong>👨‍🏫 Enseignant :</strong> <span id="modal-enseignant"></span></p>
+            <p><strong>📍 Salle :</strong> <span id="modal-salle"></span></p>
+            <p><strong>⏰ Horaire :</strong> <span id="modal-horaire"></span></p>
+            
+            <!-- LE RETOUR DU COACH IA -->
+            <div class="ai-section">
+                <p class="ai-title">
+                    ✨ Coach Révisions IA <span style="font-weight:normal; font-size:0.8em; color:#aaa;">(Beta)</span>
+                </p>
+                <div class="ai-buttons">
+                    <button class="btn-ai" onclick="askGemini('quiz')">📝 Quiz Rapide</button>
+                    <button class="btn-ai" onclick="askGemini('summary')">⚡ Résumé Express</button>
+                    <button class="btn-ai" onclick="askGemini('tips')">💡 Conseils</button>
+                </div>
+                <div id="ai-response"></div>
+            </div>
+
         </div>
     </div>
 
-    <!-- On ajoute type="module" pour pouvoir utiliser 'import' dans app.js -->
     <script src="app.js" type="module"></script>
-
 </body>
 </html>
